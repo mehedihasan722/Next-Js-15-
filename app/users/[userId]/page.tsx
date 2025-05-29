@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import React from "react";
 
 type UserProps = {
@@ -12,7 +13,7 @@ const fetchUser = async (userId: string) => {
     }
   );
   if (!res.ok) {
-    throw new Error("Failed to fetch user");
+    notFound();
   }
   return res.json();
 };
@@ -20,6 +21,10 @@ const fetchUser = async (userId: string) => {
 const UserId = async ({ params }: { params: Promise<UserProps> }) => {
   const { userId } = await params;
   const user = await fetchUser(userId);
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
 
   return (
     <div>
